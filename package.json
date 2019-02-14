@@ -1,16 +1,15 @@
 {
-	"name": "ip2location-nodejs",
+	"name": "async-ip2location",
 	"version": "8.1.3",
-	"description": "IP2Location geolocation component",
+	"description": "Asynchronous IP2Location geolocation component",
 	"keywords": [
 		"ip2location",
 		"geolocation"
 	],
 	"homepage": "http://www.ip2location.com/developers/nodejs",
 	"author": {
-		"name": "IP2Location.com",
-		"email": "sales@ip2location.com",
-		"url": "http://www.ip2location.com/"
+		"name": "Alexander Fillbrunn",
+		"email": "alxndr_f@web.de"
 	},
 	"files": [
 		"src/ip2location.js",
