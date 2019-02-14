@@ -100,6 +100,18 @@ class Database {
 		};
 	}
 
+	// Closes the database
+	async close() {
+		return new Promise((resolve, reject) => {
+			fs.close(fd, (err) => {
+				if (err) return reject(err);
+				this.binfile = '';
+				this.fd = null;
+				resolve();
+			});
+		});
+	}
+
 	// Read binary data from a file
 	async readbin(readbytes, pos, readtype, isbigint) {
 		const buff = await this.readbuffer(readbytes, pos);
