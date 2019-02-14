@@ -1,6 +1,6 @@
-# IP2Location Node.js Module
+# Asynchronous IP2Location Node.js Module
 
-This Node.js module provides a fast lookup of country, region, city, latitude, longitude, ZIP code, time zone, ISP, domain name, connection type, IDD code, area code, weather station code, station name, mcc, mnc, mobile brand, elevation, and usage type from IP address by using IP2Location database. This module uses a file based database available at IP2Location.com. This database simply contains IP blocks as keys, and other information such as country, region, city, latitude, longitude, ZIP code, time zone, ISP, domain name, connection type, IDD code, area code, weather station code, station name, mcc, mnc, mobile brand, elevation, and usage type as values. It supports both IP address in IPv4 and IPv6.
+This Node.js module provides a fast and asynchronous lookup of country, region, city, latitude, longitude, ZIP code, time zone, ISP, domain name, connection type, IDD code, area code, weather station code, station name, mcc, mnc, mobile brand, elevation, and usage type from IP address by using IP2Location database. This module uses a file based database available at IP2Location.com. This database simply contains IP blocks as keys, and other information such as country, region, city, latitude, longitude, ZIP code, time zone, ISP, domain name, connection type, IDD code, area code, weather station code, station name, mcc, mnc, mobile brand, elevation, and usage type as values. It supports both IP address in IPv4 and IPv6.
 
 This module can be used in many types of projects such as:
 
@@ -15,18 +15,6 @@ This module can be used in many types of projects such as:
 The database will be updated in monthly basis for the greater accuracy. Free sample DB1 database is available at /samples directory or download it from https://www.ip2location.com/developers.htm.
 
 The complete database is available at https://www.ip2location.com under Premium subscription package.
-
-
-## Installation
-
-To install this module type the following:
-
-```bash
-
-npm install ip2location-nodejs
-
-```
-
 
 ## Dependencies
 
@@ -45,50 +33,48 @@ Use the IPv6 BIN file if you need to query BOTH IPv4 and IPv6 addresses.
 
 ## Methods
 
+The module itself only exports a single function that is used to initialize the database. The result is a promise that resolves to a database object with the methods below.
+
 Below are the methods supported in this module.
 
 |Method Name|Description|
 |---|---|
-|IP2Location_init|Opens the IP2Location BIN data for lookup.|
-|IP2Location_get_all|Returns the geolocation information in an object.|
-|IP2Location_get_country_short|Returns the country code.|
-|IP2Location_get_country_long|Returns the country name.|
-|IP2Location_get_region|Returns the region name.|
-|IP2Location_get_city|Returns the city name.|
-|IP2Location_get_isp|Returns the ISP name.|
-|IP2Location_get_latitude|Returns the latitude.|
-|IP2Location_get_longitude|Returns the longitude.|
-|IP2Location_get_domain|Returns the domain name.|
-|IP2Location_get_zipcode|Returns the ZIP code.|
-|IP2Location_get_timezone|Returns the time zone.|
-|IP2Location_get_netspeed|Returns the net speed.|
-|IP2Location_get_iddcode|Returns the IDD code.|
-|IP2Location_get_areacode|Returns the area code.|
-|IP2Location_get_weatherstationcode|Returns the weather station code.|
-|IP2Location_get_weatherstationname|Returns the weather station name.|
-|IP2Location_get_mcc|Returns the mobile country code.|
-|IP2Location_get_mnc|Returns the mobile network code.|
-|IP2Location_get_mobilebrand|Returns the mobile brand.|
-|IP2Location_get_elevation|Returns the elevation in meters.|
-|IP2Location_get_usagetype|Returns the usage type.|
+|get_all|Returns the geolocation information in an object.|
+|get_country_short|Returns the country code.|
+|get_country_long|Returns the country name.|
+|get_region|Returns the region name.|
+|get_city|Returns the city name.|
+|get_isp|Returns the ISP name.|
+|get_latitude|Returns the latitude.|
+|get_longitude|Returns the longitude.|
+|get_domain|Returns the domain name.|
+|get_zipcode|Returns the ZIP code.|
+|get_timezone|Returns the time zone.|
+|get_netspeed|Returns the net speed.|
+|get_iddcode|Returns the IDD code.|
+|get_areacode|Returns the area code.|
+|get_weatherstationcode|Returns the weather station code.|
+|get_weatherstationname|Returns the weather station name.|
+|get_mcc|Returns the mobile country code.|
+|get_mnc|Returns the mobile network code.|
+|get_mobilebrand|Returns the mobile brand.|
+|get_elevation|Returns the elevation in meters.|
+|get_usagetype|Returns the usage type.|
 
 
 ## Usage
 
 ```javascript
 
-var ip2loc = require("ip2location-nodejs");
+var ip2loc = require('./ip2location.js');
 
-ip2loc.IP2Location_init("./DB24.BIN");
-
-testip = ['8.8.8.8', '2404:6800:4001:c01::67'];
-
-for (var x = 0; x < testip.length; x++) {
-	result = ip2loc.IP2Location_get_all(testip[x]);
-	for (var key in result) {
-		console.log(key + ": " + result[key]);
-	}
-	console.log("--------------------------------------------------------------");
-}
+ip2loc('./DB8.BIN')
+	.then((db) => {
+		return db.get_all('8.8.8.8');
+	})
+	.then(result => {
+		console.log(JSON.stringify(result))
+		console.log('--------------------------------------------------------------');
+	});
 
 ```
