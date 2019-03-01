@@ -615,21 +615,26 @@ module.exports = async function(binfile) {
 	db.usagetype_enabled = usagetype_pos[dbt] != 0;
 
 	if (db.mydb._Indexed) {
-		let buffer = await db.readbuffer(maxindex * 8 + 8, db.mydb._IndexBaseAddr - 1);
+		let buffer;
+		if (db.mydb._IndexedIPv6) {
+			buffer = await db.readbuffer(2 * (maxindex * 8 + 8), db.mydb._IndexBaseAddr - 1);
+		} else {
+			buffer = await db.readbuffer(maxindex * 8 + 8, db.mydb._IndexBaseAddr - 1);
+		}
 
+		let last = 0;
 		for (let x = 0; x < maxindex; x++) {
 			db.IndexArrayIPv4[x] = Array(2);
 			db.IndexArrayIPv4[x][0] = buffer.readUInt32LE(x * 8);
-			db.IndexArrayIPv4[x][1] = buffer.readUInt32LE(x * 8 + 4);
+			last = x * 8 + 4;
+			db.IndexArrayIPv4[x][1] = buffer.readUInt32LE(last);
 		}
-		
 		if (db.mydb._IndexedIPv6) {
-			buffer = await db.readbuffer(maxindex * 8 + 8, db.mydb._IndexBaseAddr + buffer.length - 1);
+			const base = maxindex * 8;
 			for (let x = 0; x < maxindex; x++) {
 				db.IndexArrayIPv6[x] = Array(2);
-				db.IndexArrayIPv6[x][0] = await db.read32(pointer);
-				db.IndexArrayIPv6[x][1] = await db.read32(pointer + 4);
-				pointer += 8;
+				db.IndexArrayIPv6[x][0] = buffer.readUInt32LE(base + x * 8);
+				db.IndexArrayIPv6[x][1] = buffer.readUInt32LE(base + x * 8 + 4);
 			}
 		}
 	}
