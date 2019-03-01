@@ -103,7 +103,7 @@ class Database {
 	// Closes the database
 	async close() {
 		return new Promise((resolve, reject) => {
-			fs.close(fd, (err) => {
+			fs.close(this.fd, (err) => {
 				if (err) return reject(err);
 				this.binfile = '';
 				this.fd = null;
